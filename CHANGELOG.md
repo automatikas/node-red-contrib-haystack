@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.1 - 2026-05-22
+
+### Changed
+
+- Simplified README install and usage guidance
+- Removed internal release notes wording from the public README
+- Updated npm package naming and public install guidance to use `node-red-contrib-haystack`
+- Added direct Project Haystack format links for Zinc, JSON, and Trio
+- Clarified generic behavior and compatibility wording in the docs
+
 ## 0.1.0 - 2026-05-22
 
 ### Added
