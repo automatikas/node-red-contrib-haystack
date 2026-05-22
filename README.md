@@ -21,33 +21,17 @@ Project Haystack:
 npm install
 ```
 
-From your Node-RED user directory:
+## Install
 
-```bash
-npm install /path/to/node-red-contrib-haystack
-```
-
-For npm after publish:
+Run in your Node-RED user directory:
 
 ```bash
 npm install node-red-contrib-haystack
 ```
 
-## Publish
-
-Publish the package to npm as a public scoped package:
-
-```bash
-npm publish
-```
-
-After npm publish, submit it to the Node-RED Flow Library:
-
-- [https://flows.nodered.org/add/node](https://flows.nodered.org/add/node)
-
 ## Example Flow
 
-A sanitized importable example flow is included at:
+Example flow:
 
 - [examples/demo-flow.json](C:/Users/AndriusJasiulionis/Dropbox/Darbas/Andrius/GitHub/node-red-contrib-haystack/examples/demo-flow.json)
 
@@ -63,7 +47,7 @@ The example flow does not include usernames or passwords. Configure credentials 
 
 `haystack-server` stores:
 
-- base URL, for example `http://127.0.0.1:8080`
+- base URL, for example `http://127.0.0.1:8080` or `https://haystack.example.com`
 - project path, for example `/api/{projectName}`
 - username
 - password
@@ -82,11 +66,6 @@ For Haxall, the default project is commonly `sys`, so the usual API path is:
 ```text
 /api/sys
 ```
-
-That means a typical Haxall server config is:
-
-- `Base URL = http://host:port`
-- `Project Path = /api/sys`
 
 Other Project Haystack servers may expose a different project name or API path, so this value should stay configurable instead of being hard-coded for one platform.
 
@@ -120,6 +99,12 @@ One Haystack wire format is selected for the response:
 - `zinc`
 - `json`
 - `trio`
+
+Format references:
+
+- [Zinc](https://project-haystack.org/doc/Zinc)
+- [JSON](https://project-haystack.org/doc/docHaystack/Json)
+- [Trio](https://project-haystack.org/doc/docHaystack/Trio)
 
 Return modes follow the Node-RED `http request` pattern:
 
@@ -285,36 +270,18 @@ The level selector offers levels `1` through `17`, with `1` labeled Emergency, `
 Editor values win; `msg.haystack.id`, `msg.haystack.action`, `msg.haystack.resultMode`, `msg.haystack.outputMode`, `msg.haystack.level`, `msg.haystack.value`, `msg.haystack.who`, and `msg.haystack.duration` only fill in blank fields.
 Generated request bodies still use Zinc unless you explicitly provide `msg.rawBody`.
 
-## Notes
+## Compatibility
 
-- `eval` is implemented as `POST`, matching validated Haxall behavior.
-- The package currently returns raw response text instead of parsing Zinc.
-- Query/body conventions vary by server and op, so the generic node stays intentionally low-level.
+- tested with multiple Project Haystack servers, including Haxall and SkyFoundry-based platforms
+- supports Zinc, JSON, and Trio response formats
+- parses JSON responses to objects when `Return` is set to `a parsed JSON object`
 
-## Validation Notes
-
-Validated during testing:
-
-- `about` works against Haxall and SkyFoundry/BRAID
-- `ops` works and is the best discovery starting point for server capabilities
-- `nav` works, but returned tags vary by server and vendor implementation
-- `read` works by filter and by id
-- `eval` works with Zinc request bodies and supports JSON response parsing where the server returns JSON
-- `pointWrite` works for write and auto/release workflows
-- HTTPS works with a valid FQDN and trusted CA certificate
-
-Current format rule:
+## Behavior
 
 - generated request bodies use Zinc by default
-- the main exception is `eval`, which can generate JSON request bodies when JSON format is selected
-- `msg.rawBody` bypasses generated request logic and is fully user-controlled
-
-Current server-specific findings:
-
-- `formats` may be available on some servers but returned `404` on the tested Haxall target
-- watch/session-style ops such as `watchSub`, `watchPoll`, and `watchUnsub` are not yet validated across servers
-- `hisWrite` is not included yet; it needs dedicated validation and request-side guardrails similar to `pointWrite`
-- use the `ops` operation to confirm what a specific server exposes before depending on optional or vendor-specific ops
+- `eval` can also generate a JSON request body when JSON format is selected
+- `msg.rawBody` sends a fully custom request body
+- use the `ops` operation to inspect which operations a specific server exposes
 
 ## Project Haystack References
 
