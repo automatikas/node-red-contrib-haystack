@@ -1,5 +1,5 @@
 {
-  "name": "@automatikas/node-red-contrib-haystack",
+  "name": "node-red-contrib-haystack",
   "version": "0.1.0",
   "description": "Node-RED nodes for Project Haystack authentication and HTTP operations.",
   "keywords": [

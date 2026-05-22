@@ -1,4 +1,4 @@
-# @automatikas/node-red-contrib-haystack
+# node-red-contrib-haystack
 
 Node-RED nodes for Project Haystack authentication and HTTP ops against Project Haystack servers such as Haxall, FIN, SkySpark, and other Haystack-compatible platforms.
 
@@ -30,7 +30,7 @@ npm install /path/to/node-red-contrib-haystack
 For npm after publish:
 
 ```bash
-npm install @automatikas/node-red-contrib-haystack
+npm install node-red-contrib-haystack
 ```
 
 ## Publish
@@ -38,7 +38,7 @@ npm install @automatikas/node-red-contrib-haystack
 Publish the package to npm as a public scoped package:
 
 ```bash
-npm publish --access public
+npm publish
 ```
 
 After npm publish, submit it to the Node-RED Flow Library:
