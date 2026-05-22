@@ -128,7 +128,7 @@ Return modes follow the Node-RED `http request` pattern:
 
 When Return is set to `a parsed JSON object`, JSON responses are parsed into objects and returned in `msg.payload`. Zinc and Trio remain UTF-8 strings, with the original text also available as `msg.payloadRaw`.
 
-For V1, generated request bodies still use Zinc by default. The main exception is `eval`, which can generate JSON request bodies when JSON format is selected.
+Generated request bodies use Zinc by default. The main exception is `eval`, which can generate JSON request bodies when JSON format is selected.
 
 Default `Accept` and `Content-Type` headers are inferred from the selected format. For custom headers, use `msg.headers`, following the same pattern as the built-in HTTP Request node.
 For example, if `Format` is `JSON`, the node sends `application/json; charset=utf-8` and expects `application/json` unless you explicitly override with `msg.headers`.
@@ -293,7 +293,7 @@ Generated request bodies still use Zinc unless you explicitly provide `msg.rawBo
 
 ## Validation Notes
 
-Validated during V1 testing:
+Validated during testing:
 
 - `about` works against Haxall and SkyFoundry/BRAID
 - `ops` works and is the best discovery starting point for server capabilities
@@ -303,7 +303,7 @@ Validated during V1 testing:
 - `pointWrite` works for write and auto/release workflows
 - HTTPS works with a valid FQDN and trusted CA certificate
 
-Current V1 format rule:
+Current format rule:
 
 - generated request bodies use Zinc by default
 - the main exception is `eval`, which can generate JSON request bodies when JSON format is selected
@@ -313,7 +313,7 @@ Current server-specific findings:
 
 - `formats` may be available on some servers but returned `404` on the tested Haxall target
 - watch/session-style ops such as `watchSub`, `watchPoll`, and `watchUnsub` are not yet validated across servers
-- `hisWrite` is not part of the first release scope yet; it needs dedicated validation and request-side guardrails similar to `pointWrite`
+- `hisWrite` is not included yet; it needs dedicated validation and request-side guardrails similar to `pointWrite`
 - use the `ops` operation to confirm what a specific server exposes before depending on optional or vendor-specific ops
 
 ## Project Haystack References

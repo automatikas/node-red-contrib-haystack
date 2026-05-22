@@ -59,7 +59,7 @@
   <p>Generic Project Haystack HTTP op node with automatic auth and token reuse.</p>
   <p>Values can be supplied from the editor or overridden by <code>msg</code>.</p>
   <p><code>msg.haystack.op</code> overrides the selected op. In <code>Auto</code> mode, <code>eval</code>, <code>hisRead</code>, and <code>pointWrite</code> default to POST.</p>
-  <p>Select one Haystack wire format for the response. For V1, generated request bodies use Zinc by default. <code>eval</code> is the main exception and can generate JSON when JSON format is selected.</p>
+  <p>Select one Haystack wire format for the response. Generated request bodies use Zinc by default. <code>eval</code> is the main exception and can generate JSON when JSON format is selected.</p>
   <p>For <code>eval</code>, you may pass either <code>msg.haystack.expr</code> or a plain expression string in <code>msg.payload</code>; the node will build a Zinc or JSON request body to match the selected format rules.</p>
   <p>Default <code>Accept</code> and <code>Content-Type</code> headers are derived from the selected format. Use <code>msg.headers</code> for any custom headers, just like the built-in HTTP Request node.</p>
   <p>Use the <code>ops</code> op to inspect which operations your server exposes. Many servers include vendor- or project-specific ops in addition to the core Project Haystack set.</p>
