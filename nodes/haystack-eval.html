@@ -1,0 +1,55 @@
+<script type="text/html" data-template-name="haystack-eval">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-expr"><i class="fa fa-code"></i> Expr</label>
+    <input type="text" id="node-input-expr" placeholder="readAll(point).limit(10)" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-format"><i class="fa fa-exchange"></i> Format</label>
+    <select id="node-input-format">
+      <option value="zinc">Zinc</option>
+      <option value="json">JSON</option>
+      <option value="trio">Trio</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-outputMode"><i class="fa fa-reply"></i> Return</label>
+    <select id="node-input-outputMode">
+      <option value="string">a UTF-8 string</option>
+      <option value="object">a parsed JSON object</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="haystack-eval">
+  <p>Convenience node for the Project Haystack <code>eval</code> op using POST.</p>
+  <p>The node evaluates an Axon expression sent in a single-row request grid with an <code>expr</code> column.</p>
+  <p>Zinc and JSON request generation are supported. Trio may be selected as the response format, but generated request bodies still use Zinc unless JSON is selected.</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("haystack-eval", {
+    category: "haystack",
+    color: "#4476a4",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "haystack-server", required: true },
+      expr: { value: "" },
+      format: { value: "zinc" },
+      outputMode: { value: "string" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-tags",
+    label: function () {
+      return this.name || "haystack-eval";
+    }
+  });
+</script>

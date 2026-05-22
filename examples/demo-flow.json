@@ -1,0 +1,347 @@
+[
+  {
+    "id": "1111111111111111",
+    "type": "tab",
+    "label": "node-red-contrib-haystack demo",
+    "disabled": false,
+    "info": "Sanitized example flow for node-red-contrib-haystack"
+  },
+  {
+    "id": "2222222222222222",
+    "type": "inject",
+    "z": "1111111111111111",
+    "name": "request/eval (Trio)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      },
+      {
+        "p": "haystack.expr",
+        "v": "readAll(id==@POINT_REF)",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "x": 180,
+    "y": 80,
+    "wires": [
+      [
+        "3333333333333333"
+      ]
+    ]
+  },
+  {
+    "id": "3333333333333333",
+    "type": "haystack-request",
+    "z": "1111111111111111",
+    "name": "eval via request",
+    "server": "aaaaaaaaaaaaaaaa",
+    "op": "eval",
+    "opCustom": "",
+    "method": "auto",
+    "format": "trio",
+    "outputMode": "string",
+    "x": 460,
+    "y": 80,
+    "wires": [
+      [
+        "4444444444444444"
+      ]
+    ]
+  },
+  {
+    "id": "4444444444444444",
+    "type": "debug",
+    "z": "1111111111111111",
+    "name": "request/eval result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "5555555555555555",
+    "type": "inject",
+    "z": "1111111111111111",
+    "name": "read filter (JSON)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 140,
+    "wires": [
+      [
+        "6666666666666666"
+      ]
+    ]
+  },
+  {
+    "id": "6666666666666666",
+    "type": "haystack-read",
+    "z": "1111111111111111",
+    "name": "read points by filter",
+    "server": "aaaaaaaaaaaaaaaa",
+    "filter": "point and temp and equipRef==@EQUIP_REF",
+    "recordId": "",
+    "format": "json",
+    "outputMode": "object",
+    "x": 470,
+    "y": 140,
+    "wires": [
+      [
+        "7777777777777777"
+      ]
+    ]
+  },
+  {
+    "id": "7777777777777777",
+    "type": "debug",
+    "z": "1111111111111111",
+    "name": "read result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "8888888888888888",
+    "type": "inject",
+    "z": "1111111111111111",
+    "name": "hisRead (Trio)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 200,
+    "wires": [
+      [
+        "9999999999999999"
+      ]
+    ]
+  },
+  {
+    "id": "9999999999999999",
+    "type": "haystack-hisread",
+    "z": "1111111111111111",
+    "name": "history today",
+    "server": "aaaaaaaaaaaaaaaa",
+    "recordId": "@POINT_REF",
+    "range": "today",
+    "format": "trio",
+    "outputMode": "string",
+    "x": 460,
+    "y": 200,
+    "wires": [
+      [
+        "bbbbbbbbbbbbbbbb"
+      ]
+    ]
+  },
+  {
+    "id": "bbbbbbbbbbbbbbbb",
+    "type": "debug",
+    "z": "1111111111111111",
+    "name": "hisRead result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "cccccccccccccccc",
+    "type": "inject",
+    "z": "1111111111111111",
+    "name": "eval node (Trio)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 260,
+    "wires": [
+      [
+        "dddddddddddddddd"
+      ]
+    ]
+  },
+  {
+    "id": "dddddddddddddddd",
+    "type": "haystack-eval",
+    "z": "1111111111111111",
+    "name": "eval direct",
+    "server": "aaaaaaaaaaaaaaaa",
+    "expr": "readAll(id==@POINT_REF)",
+    "format": "trio",
+    "outputMode": "string",
+    "x": 460,
+    "y": 260,
+    "wires": [
+      [
+        "eeeeeeeeeeeeeeee"
+      ]
+    ]
+  },
+  {
+    "id": "eeeeeeeeeeeeeeee",
+    "type": "debug",
+    "z": "1111111111111111",
+    "name": "eval result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "ffffffffffffffff",
+    "type": "inject",
+    "z": "1111111111111111",
+    "name": "pointWrite (Trio)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 320,
+    "wires": [
+      [
+        "1212121212121212"
+      ]
+    ]
+  },
+  {
+    "id": "1212121212121212",
+    "type": "haystack-point-write",
+    "z": "1111111111111111",
+    "name": "write setpoint",
+    "server": "aaaaaaaaaaaaaaaa",
+    "recordId": "@WRITABLE_POINT_REF",
+    "action": "write",
+    "resultMode": "array",
+    "format": "trio",
+    "outputMode": "string",
+    "level": "16",
+    "value": "18",
+    "who": "",
+    "duration": "5min",
+    "x": 470,
+    "y": 320,
+    "wires": [
+      [
+        "1313131313131313"
+      ]
+    ]
+  },
+  {
+    "id": "1313131313131313",
+    "type": "debug",
+    "z": "1111111111111111",
+    "name": "pointWrite result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 770,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "aaaaaaaaaaaaaaaa",
+    "type": "haystack-server",
+    "name": "Project Haystack Server",
+    "baseUrl": "http://127.0.0.1:8080",
+    "projectPath": "/api/sys",
+    "requestTimeout": "30000"
+  }
+]

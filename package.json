@@ -1,0 +1,52 @@
+{
+  "name": "node-red-contrib-haystack",
+  "version": "0.1.0",
+  "description": "Node-RED nodes for Project Haystack authentication and HTTP operations.",
+  "keywords": [
+    "node-red",
+    "project-haystack",
+    "haystack",
+    "haxall",
+    "finstack",
+    "skyspark",
+    "hvac",
+    "bms",
+    "building-controls",
+    "building-automation"
+  ],
+  "author": "Andrius Jasiulionis",
+  "license": "MIT",
+  "main": "nodes/haystack-request.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/automatikas/node-red-contrib-haystack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/automatikas/node-red-contrib-haystack/issues"
+  },
+  "homepage": "https://github.com/automatikas/node-red-contrib-haystack#readme",
+  "files": [
+    "lib",
+    "nodes",
+    "examples",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "node-red": {
+    "nodes": {
+      "haystack-server": "nodes/haystack-server.js",
+      "haystack-request": "nodes/haystack-request.js",
+      "haystack-read": "nodes/haystack-read.js",
+      "haystack-hisread": "nodes/haystack-hisread.js",
+      "haystack-eval": "nodes/haystack-eval.js",
+      "haystack-point-write": "nodes/haystack-point-write.js"
+    }
+  },
+  "scripts": {
+    "lint": "node --check lib/haystack-client.js && node --check nodes/haystack-server.js && node --check nodes/haystack-request.js && node --check nodes/haystack-read.js && node --check nodes/haystack-hisread.js && node --check nodes/haystack-eval.js && node --check nodes/haystack-point-write.js",
+    "test": "node test/haystack-client.test.js"
+  }
+}

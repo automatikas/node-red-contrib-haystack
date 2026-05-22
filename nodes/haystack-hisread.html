@@ -1,0 +1,62 @@
+<script type="text/html" data-template-name="haystack-hisread">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-recordId"><i class="fa fa-crosshairs"></i> Id</label>
+    <input type="text" id="node-input-recordId" placeholder="@somePoint" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-range"><i class="fa fa-calendar"></i> Range</label>
+    <input type="text" id="node-input-range" placeholder="today" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-format"><i class="fa fa-exchange"></i> Format</label>
+    <select id="node-input-format">
+      <option value="zinc">Zinc</option>
+      <option value="json">JSON</option>
+      <option value="trio">Trio</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-outputMode"><i class="fa fa-reply"></i> Return</label>
+    <select id="node-input-outputMode">
+      <option value="string">a UTF-8 string</option>
+      <option value="object">a parsed JSON object</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="haystack-hisread">
+  <p>Convenience node for the Project Haystack <code>hisRead</code> op.</p>
+  <p>The node sends a single-point hisRead request with:</p>
+  <p>- <code>id</code>: Ref of the historized point</p>
+  <p>- <code>range</code>: Haystack string such as <code>today</code> or another date/time range expression</p>
+  <p>By default the node uses query parameters for the common single-point request. If you explicitly provide <code>msg.rawBody</code>, it will send a POST request with that body instead.</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("haystack-hisread", {
+    category: "haystack",
+    color: "#4476a4",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "haystack-server", required: true },
+      recordId: { value: "" },
+      range: { value: "today" },
+      format: { value: "zinc" },
+      outputMode: { value: "string" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-tags",
+    label: function () {
+      return this.name || "haystack-hisread";
+    }
+  });
+</script>

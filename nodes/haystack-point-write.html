@@ -1,0 +1,137 @@
+<script type="text/html" data-template-name="haystack-point-write">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-recordId"><i class="fa fa-crosshairs"></i> Id</label>
+    <input type="text" id="node-input-recordId" placeholder="@someWritablePoint" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-action"><i class="fa fa-bolt"></i> Action</label>
+    <select id="node-input-action">
+      <option value="write">Write</option>
+      <option value="manualAuto">Manual Auto</option>
+      <option value="emergencyAuto">Emergency Auto</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-level"><i class="fa fa-sort-numeric-asc"></i> Level</label>
+    <select id="node-input-level">
+      <option value="1">1 (Emergency)</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8 (Manual)</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17 (Default)</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-value"><i class="fa fa-pencil"></i> Value</label>
+    <input type="text" id="node-input-value" placeholder="72, true, \"auto\"" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-who"><i class="fa fa-user"></i> Who</label>
+    <input type="text" id="node-input-who" placeholder="node-red" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-duration"><i class="fa fa-clock-o"></i> Duration</label>
+    <input type="text" id="node-input-duration" placeholder="5min" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-resultMode"><i class="fa fa-list"></i> Result</label>
+    <select id="node-input-resultMode">
+      <option value="ack">return write response</option>
+      <option value="array">return pointWrite array</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-format"><i class="fa fa-exchange"></i> Format</label>
+    <select id="node-input-format">
+      <option value="zinc">Zinc</option>
+      <option value="json">JSON</option>
+      <option value="trio">Trio</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-outputMode"><i class="fa fa-reply"></i> Return</label>
+    <select id="node-input-outputMode">
+      <option value="string">a UTF-8 string</option>
+      <option value="object">a parsed JSON object</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="haystack-point-write">
+  <p>Convenience node for the Project Haystack <code>pointWrite</code> op.</p>
+  <p>The op can write a writable point level or read back the writable priority array after the action.</p>
+  <p>Use <code>Write</code> for a normal write, <code>Manual Auto</code> to clear level 8, and <code>Emergency Auto</code> to clear level 1.</p>
+  <p><code>who</code> is optional. If omitted, the server may use the authenticated user display name.</p>
+  <p><code>duration</code> is relevant when controlling manual override behavior on level 8.</p>
+  <p>Result chooses whether the node returns the raw write response or the updated point write array after the action.</p>
+  <p>Generated request bodies use Zinc. Format controls the response format unless you explicitly provide <code>msg.rawBody</code>.</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("haystack-point-write", {
+    category: "haystack",
+    color: "#4476a4",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "haystack-server", required: true },
+      recordId: { value: "" },
+      action: { value: "write" },
+      resultMode: { value: "array" },
+      format: { value: "zinc" },
+      outputMode: { value: "string" },
+      level: { value: "16" },
+      value: { value: "" },
+      who: { value: "" },
+      duration: { value: "" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-tags",
+    label: function () {
+      return this.name || "haystack-point-write";
+    },
+    oneditprepare: function () {
+      if (!this.recordId && this.id) {
+        $("#node-input-recordId").val(this.id);
+      }
+
+      function toggleFields() {
+        const action = $("#node-input-action").val();
+        const level = action === "manualAuto" ? "8" : action === "emergencyAuto" ? "1" : $("#node-input-level").val();
+        const showLevel = action === "write";
+        const showValue = action === "write";
+        const showWho = action !== "";
+        const showDuration = level === "8" || level === "1";
+
+        $("#node-input-level").closest(".form-row").toggle(showLevel);
+        $("#node-input-value").closest(".form-row").toggle(showValue);
+        $("#node-input-who").closest(".form-row").toggle(showWho);
+        $("#node-input-duration").closest(".form-row").toggle(showDuration);
+      }
+
+      $("#node-input-action").on("change", toggleFields);
+      $("#node-input-level").on("change", toggleFields);
+      toggleFields();
+    }
+  });
+</script>

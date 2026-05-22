@@ -1,0 +1,110 @@
+<script type="text/html" data-template-name="haystack-request">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-plug"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-op"><i class="fa fa-cog"></i> Op</label>
+    <select id="node-input-op">
+      <option value="">Set from msg.haystack.op</option>
+      <option value="about">about</option>
+      <option value="ops">ops</option>
+      <option value="formats">formats</option>
+      <option value="read">read</option>
+      <option value="nav">nav</option>
+      <option value="watchSub">watchSub</option>
+      <option value="watchPoll">watchPoll</option>
+      <option value="watchUnsub">watchUnsub</option>
+      <option value="hisRead">hisRead</option>
+      <option value="hisWrite">hisWrite</option>
+      <option value="eval">eval</option>
+      <option value="pointWrite">pointWrite</option>
+      <option value="__custom__">Custom...</option>
+    </select>
+  </div>
+  <div class="form-row" id="node-input-op-custom-row">
+    <label for="node-input-opCustom"><i class="fa fa-pencil"></i> Custom Op</label>
+    <input type="text" id="node-input-opCustom" placeholder="define, commit, customOp" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-method"><i class="fa fa-exchange"></i> Method</label>
+    <select id="node-input-method">
+      <option value="auto">Auto</option>
+      <option value="GET">GET</option>
+      <option value="POST">POST</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-format"><i class="fa fa-exchange"></i> Format</label>
+    <select id="node-input-format">
+      <option value="zinc">Zinc</option>
+      <option value="json">JSON</option>
+      <option value="trio">Trio</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-outputMode"><i class="fa fa-reply"></i> Return</label>
+    <select id="node-input-outputMode">
+      <option value="string">a UTF-8 string</option>
+      <option value="object">a parsed JSON object</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="haystack-request">
+  <p>Generic Project Haystack HTTP op node with automatic auth and token reuse.</p>
+  <p>Values can be supplied from the editor or overridden by <code>msg</code>.</p>
+  <p><code>msg.haystack.op</code> overrides the selected op. In <code>Auto</code> mode, <code>eval</code>, <code>hisRead</code>, and <code>pointWrite</code> default to POST.</p>
+  <p>Select one Haystack wire format for the response. For V1, generated request bodies use Zinc by default. <code>eval</code> is the main exception and can generate JSON when JSON format is selected.</p>
+  <p>For <code>eval</code>, you may pass either <code>msg.haystack.expr</code> or a plain expression string in <code>msg.payload</code>; the node will build a Zinc or JSON request body to match the selected format rules.</p>
+  <p>Default <code>Accept</code> and <code>Content-Type</code> headers are derived from the selected format. Use <code>msg.headers</code> for any custom headers, just like the built-in HTTP Request node.</p>
+  <p>Use the <code>ops</code> op to inspect which operations your server exposes. Many servers include vendor- or project-specific ops in addition to the core Project Haystack set.</p>
+  <p>Message examples:</p>
+  <p>- <code>msg.haystack = { op: "read", query: { filter: "point and temp" } }</code></p>
+  <p>- <code>msg.haystack = { op: "eval", expr: "readAll(point).limit(5)" }</code></p>
+  <p>- <code>msg.haystack = { op: "read", id: "@someRecordRef", format: "json", outputMode: "object" }</code></p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("haystack-request", {
+    category: "haystack",
+    color: "#4476a4",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "haystack-server", required: true },
+      op: { value: "" },
+      opCustom: { value: "" },
+      method: { value: "auto", required: true },
+      format: { value: "zinc" },
+      outputMode: { value: "string" }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-tags",
+    label: function () {
+      if (this.name) {
+        return this.name;
+      }
+      if (this.op === "__custom__") {
+        return this.opCustom || "haystack-request";
+      }
+      return this.op || "haystack-request";
+    },
+    oneditprepare: function () {
+      function toggleCustomOp() {
+        if ($("#node-input-op").val() === "__custom__") {
+          $("#node-input-op-custom-row").show();
+        } else {
+          $("#node-input-op-custom-row").hide();
+        }
+      }
+
+      $("#node-input-op").on("change", toggleCustomOp);
+      toggleCustomOp();
+    }
+  });
+</script>
