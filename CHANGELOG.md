@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.2 - 2026-05-26
+
+### Changed
+
+- Refined public README wording and structure
+- Cleaned distributed docs to remove internal notes and release-planning content
+- Updated the example flow placeholders for generic Haystack server and project usage
+
 ## 0.1.1 - 2026-05-22
 
 ### Changed

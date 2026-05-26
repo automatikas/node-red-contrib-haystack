@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-haystack",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Node-RED nodes for Project Haystack authentication and HTTP operations.",
   "keywords": [
     "node-red",
