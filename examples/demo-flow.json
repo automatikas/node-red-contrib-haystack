@@ -308,7 +308,7 @@
     "format": "trio",
     "outputMode": "string",
     "level": "16",
-    "value": "18",
+    "value": "123",
     "who": "",
     "duration": "5min",
     "x": 470,
@@ -340,8 +340,8 @@
     "id": "aaaaaaaaaaaaaaaa",
     "type": "haystack-server",
     "name": "Project Haystack Server",
-    "baseUrl": "http://127.0.0.1:8080",
-    "projectPath": "/api/sys",
+    "baseUrl": "http://haystackServer:8080",
+    "projectPath": "/api/myProjectName",
     "requestTimeout": "30000"
   }
 ]

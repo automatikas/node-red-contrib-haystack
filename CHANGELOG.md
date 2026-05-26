@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Simplified README install and usage guidance
-- Removed internal release notes wording from the public README
+- Simplified public README wording
 - Updated npm package naming and public install guidance to use `node-red-contrib-haystack`
 - Added direct Project Haystack format links for Zinc, JSON, and Trio
 - Clarified generic behavior and compatibility wording in the docs
@@ -39,7 +39,7 @@ All notable changes to this project will be documented in this file.
 - `ops` is the preferred discovery entry point for checking which operations a specific server exposes
 - `formats` was available on one tested server but returned `404` on the tested Haxall target
 - watch/session-style ops are not yet validated across servers
-- `hisWrite` is intentionally deferred from the first release scope pending dedicated validation and request-side guardrails
+- `hisWrite` is not included yet and needs dedicated validation and request-side guardrails
 - generated request bodies use Zinc by default; `eval` is the main operation with built-in JSON request generation
 
 ### Notes

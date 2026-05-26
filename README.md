@@ -1,131 +1,100 @@
-# node-red-contrib-haystack
+# ![Project Haystack](examples/tag.png) node-red-contrib-haystack
 
-Node-RED nodes for Project Haystack authentication and HTTP ops against Project Haystack servers such as Haxall, FIN, SkySpark, and other Haystack-compatible platforms.
+Node-RED nodes for working with Project Haystack servers.
 
-Project Haystack:
+This package lets Node-RED authenticate with Haystack-compatible servers and call common Haystack HTTP API operations such as `read`, `hisRead`, `eval`, and `pointWrite`.
 
-- [https://project-haystack.org/](https://project-haystack.org/)
-
-## Included nodes
-
-- `haystack-server`: config node for URL, project path, credentials, and token caching
-- `haystack-request`: generic Haystack op runner
-- `haystack-read`: convenience node for `read`
-- `haystack-hisread`: convenience node for `hisRead`
-- `haystack-eval`: convenience node for `eval`
-- `haystack-point-write`: convenience node for `pointWrite`
-
-## Install for local development
-
-```bash
-npm install
-```
+Supported server platforms include Haxall, FIN, SkySpark, and other Project Haystack-compatible systems.
 
 ## Install
 
-Run in your Node-RED user directory:
+Install from the Node-RED editor:
+
+1. Open **Manage palette**
+2. Go to **Install**
+3. Search for `node-red-contrib-haystack`
+4. Click **Install**
+
+Or install from the command line in your Node-RED user directory, usually `~/.node-red`:
 
 ```bash
 npm install node-red-contrib-haystack
 ```
 
-## Example Flow
+Restart Node-RED after installation if required.
 
-Example flow:
+## Nodes
 
-- [examples/demo-flow.json](C:/Users/AndriusJasiulionis/Dropbox/Darbas/Andrius/GitHub/node-red-contrib-haystack/examples/demo-flow.json)
+This package provides the following nodes:
 
-Before using it, replace the placeholder refs with values from your own server:
+| Node                   | Description                                                                       |
+| ---------------------- | --------------------------------------------------------------------------------- |
+| `haystack-server`      | Configuration node for server URL, project path, credentials, and token caching.  |
+| `haystack-request`     | Generic Haystack HTTP operation node. Use this for common or custom Haystack ops. |
+| `haystack-read`        | Convenience node for the `read` operation.                                        |
+| `haystack-hisread`     | Convenience node for the `hisRead` operation.                                     |
+| `haystack-eval`        | Convenience node for the `eval` operation.                                        |
+| `haystack-point-write` | Convenience node for the `pointWrite` operation.                                  |
 
-- `@POINT_REF`
-- `@EQUIP_REF`
-- `@WRITABLE_POINT_REF`
+## Quick start
 
-The example flow does not include usernames or passwords. Configure credentials in the `haystack-server` config node after import.
+1. Add one of the Haystack nodes, for example `haystack-read` or `haystack-eval`.
+2. Open the node configuration.
+3. Create a new `haystack-server` config node from the server field.
+4. Configure the connection settings.
+5. Deploy the flow.
 
-## Config node
-
-`haystack-server` stores:
-
-- base URL, for example `http://127.0.0.1:8080` or `https://haystack.example.com`
-- project path, for example `/api/{projectName}`
-- username
-- password
-
-The runtime authenticates lazily on the first request and caches the returned auth token.
-
-### Base URL and Project Path
-
-The server config intentionally separates:
-
-- `Base URL`: the server root, for example `http://127.0.0.1:8080`
-- `Project Path`: the Haystack HTTP API path under that server, following the Project Haystack convention `/api/{projectName}`
-
-For Haxall, the default project is commonly `sys`, so the usual API path is:
+Example configuration:
 
 ```text
-/api/sys
+Base URL:    http://haystackServer:8080
+Project Path: /api/myProjectName
 ```
 
-Other Project Haystack servers may expose a different project name or API path, so this value should stay configurable instead of being hard-coded for one platform.
+The first request authenticates automatically. The authentication token is cached and reused by the runtime.
 
-## Generic request node
+## Example flow
 
-`haystack-request` accepts values from the editor or from `msg`:
+An example flow is included in the repository:
 
-- `msg.haystack.op`
-- `msg.method`
-- `msg.haystack.method`
-- `msg.format`
-- `msg.haystack.format`
-- `msg.outputMode`
-- `msg.haystack.outputMode`
-- `msg.headers`
-- `msg.payload`
-- `msg.rawBody`
+```text
+examples/demo-flow.json
+```
 
-The node returns:
+Example flow preview:
 
-- `msg.payload`: response body
-- `msg.statusCode`
-- `msg.headers`
+![Example flow](examples/example.png)
 
-The editor provides a dropdown for common Haystack ops. You can override the configured value with `msg.haystack.op`. In `Auto` method mode, `eval`, `hisRead`, and `pointWrite` use `POST`.
+After importing the flow, replace the placeholder refs with refs from your own Haystack server:
 
-Use the `ops` operation to inspect which operations your server exposes. Many Haystack servers include additional vendor- or project-specific ops beyond the common Project Haystack set, so `Custom...` remains important.
+```text
+@POINT_REF
+@EQUIP_REF
+@WRITABLE_POINT_REF
+```
 
-One Haystack wire format is selected for the response:
+Credentials are not included in the example flow. Configure them in the `haystack-server` config node after import.
 
-- `zinc`
-- `json`
-- `trio`
+## Configuration
 
-Format references:
+### `haystack-server`
 
-- [Zinc](https://project-haystack.org/doc/Zinc)
-- [JSON](https://project-haystack.org/doc/docHaystack/Json)
-- [Trio](https://project-haystack.org/doc/docHaystack/Trio)
+The `haystack-server` node stores the shared connection settings used by the other Haystack nodes.
 
-Return modes follow the Node-RED `http request` pattern:
+| Field        | Description                                                                                              |
+| ------------ | -------------------------------------------------------------------------------------------------------- |
+| Base URL     | Server root URL or hostname, for example `http://haystackServer:8080` or `https://haystack.example.com`. |
+| Project Path | Haystack HTTP API path, usually `/api/{projectName}`.                                                    |
+| Username     | Username used for Haystack authentication.                                                               |
+| Password     | Password used for Haystack authentication.                                                               |
 
-- `a UTF-8 string`
-- `a parsed JSON object`
+Tip: for Haxall, the default project is commonly named `sys`.
 
-When Return is set to `a parsed JSON object`, JSON responses are parsed into objects and returned in `msg.payload`. Zinc and Trio remain UTF-8 strings, with the original text also available as `msg.payloadRaw`.
+## Usage
 
-Generated request bodies use Zinc by default. The main exception is `eval`, which can generate JSON request bodies when JSON format is selected.
+Most nodes can be configured in the editor or controlled dynamically using `msg.haystack`.
 
-Default `Accept` and `Content-Type` headers are inferred from the selected format. For custom headers, use `msg.headers`, following the same pattern as the built-in HTTP Request node.
-For example, if `Format` is `JSON`, the node sends `application/json; charset=utf-8` and expects `application/json` unless you explicitly override with `msg.headers`.
-
-For `eval`, you can provide either:
-
-- `msg.haystack.expr = "readAll(point).limit(5)"`
-- or `msg.payload = "readAll(point).limit(5)"`
-
-and the request node will build the Zinc or JSON body automatically unless you explicitly send `msg.rawBody`.
-
-The preferred dynamic input shape is a nested object such as:
+The preferred message format is:
 
 ```json
 {
@@ -136,158 +105,100 @@ The preferred dynamic input shape is a nested object such as:
 }
 ```
 
-Flat fields such as `msg.id` or `msg.expr` are still accepted as a temporary compatibility fallback where supported, but op selection now uses `msg.haystack.op`.
+Older flat message fields are still accepted in some places for compatibility, but new flows should use `msg.haystack`.
 
-Examples:
+## Node details
 
-```json
-{
-  "haystack": {
-    "op": "read",
-    "query": {
-      "filter": "point and temp"
-    }
-  }
-}
+### `haystack-request`
+
+Generic node for calling Haystack HTTP API operations.
+
+Supports common and custom Haystack ops using `msg.haystack.op`.
+
+Common message fields:
+
+```text
+msg.haystack.op
+msg.haystack.format
+msg.haystack.outputMode
+msg.headers
+msg.payload
+msg.rawBody
 ```
 
-```json
-{
-  "haystack": {
-    "op": "hisRead",
-    "id": "@somePointRef",
-    "range": "today",
-    "format": "trio",
-    "outputMode": "string"
-  }
-}
-```
+Returns:
 
-```json
-{
-  "haystack": {
-    "op": "eval",
-    "expr": "readAll(point).limit(5)"
-  }
-}
+```text
+msg.payload
+msg.statusCode
+msg.headers
 ```
-
-```json
-{
-  "haystack": {
-    "op": "read",
-    "id": "@someRecordRef",
-    "format": "json",
-    "outputMode": "object"
-  }
-}
-```
-
-## Convenience nodes
 
 ### `haystack-eval`
 
-Accepts:
-
-- `msg.haystack.expr`
-- `msg.haystack.format`
-- `msg.haystack.outputMode`
-
-Sends a POST to the `eval` op. `msg.haystack.expr` is used when the editor field is left empty.
-`haystack-eval` supports Zinc, JSON, and Trio response format selection, and it can return JSON as a parsed object.
+Convenience node for the `eval` operation.
 
 ### `haystack-read`
 
-Accepts either:
+Convenience node for the `read` operation.
 
-- `msg.haystack.filter`
-- `msg.haystack.id`
-- `msg.haystack.format`
-- `msg.haystack.outputMode`
-
-If `msg.haystack.filter` is provided it will be sent as a query string. Otherwise `msg.haystack.id` is sent as a Zinc POST body so the `id` is typed as a Haystack Ref. You may also configure a default id in the editor.
-If the editor field is set, it wins; `msg.haystack.filter` or `msg.haystack.id` only fill in blank fields.
-`haystack-read` supports Zinc, JSON, and Trio response format selection.
-Generated request bodies still use Zinc unless you explicitly provide `msg.rawBody`.
-
-Examples:
-
-```json
-{
-  "haystack": {
-    "filter": "point and temp and equipRef==@someEquipRef"
-  }
-}
-```
-
-```json
-{
-  "haystack": {
-    "id": "@someRecordRef"
-  }
-}
-```
+Supports reads by filter or record id.
 
 ### `haystack-hisread`
 
-Accepts:
+Convenience node for the `hisRead` operation.
 
-- `msg.haystack.id`
-- `msg.haystack.range`
-- `msg.haystack.format`
-- `msg.haystack.outputMode`
-
-By default the node sends a single-point `hisRead` request using query parameters with `id` as a Ref and `range` as a Haystack string. If you explicitly provide `msg.rawBody`, it sends that body as a POST request instead. Editor values win; `msg.haystack.id` and `msg.haystack.range` only fill in blank fields.
-`haystack-hisread` supports Zinc, JSON, and Trio response format selection.
+Supports single-point history reads.
 
 ### `haystack-point-write`
 
-Accepts:
+Convenience node for the `pointWrite` operation.
 
-- `msg.haystack.id`
-- `msg.haystack.action`
-- `msg.haystack.resultMode`
-- `msg.haystack.format`
-- `msg.haystack.outputMode`
-- `msg.haystack.level`
-- `msg.haystack.value`
-- `msg.haystack.who`
-- `msg.haystack.duration`
+Supported actions:
 
-Sends a Zinc body to the `pointWrite` op.
-Supported actions are `write`, `manualAuto`, and `emergencyAuto`.
-`manualAuto` clears level `8`, and `emergencyAuto` clears level `1`.
-Supported result modes are `array` and `ack`.
-`array` returns the updated point write array, and `ack` returns the raw write acknowledgement.
-Return modes follow the same pattern as the generic request node:
+```text
+write
+manualAuto
+emergencyAuto
+```
 
-- `a UTF-8 string`
-- `a parsed JSON object`
+Supported result modes:
 
-Parsed JSON output requires the server response to actually be JSON.
-The original write acknowledgement is kept in `msg.pointWriteAck`.
-The level selector offers levels `1` through `17`, with `1` labeled Emergency, `8` labeled Manual, and `17` labeled Default.
-Editor values win; `msg.haystack.id`, `msg.haystack.action`, `msg.haystack.resultMode`, `msg.haystack.outputMode`, `msg.haystack.level`, `msg.haystack.value`, `msg.haystack.who`, and `msg.haystack.duration` only fill in blank fields.
-Generated request bodies still use Zinc unless you explicitly provide `msg.rawBody`.
+```text
+array
+ack
+```
+
+## Formats
+
+The nodes support these Project Haystack wire formats:
+
+| Format | Description                                    |
+| ------ | ---------------------------------------------- |
+| Zinc   | Default format for generated request bodies.   |
+| JSON   | Can be returned as a parsed JavaScript object. |
+| Trio   | Returned as a UTF-8 string.                    |
 
 ## Compatibility
 
-- tested with multiple Project Haystack servers, including Haxall and SkyFoundry-based platforms
-- supports Zinc, JSON, and Trio response formats
-- parses JSON responses to objects when `Return` is set to `a parsed JSON object`
+This package is designed for platforms implementing the Project Haystack HTTP API and related Haystack protocols.
 
-## Behavior
+Compatible platforms include:
 
-- generated request bodies use Zinc by default
-- `eval` can also generate a JSON request body when JSON format is selected
-- `msg.rawBody` sends a fully custom request body
-- use the `ops` operation to inspect which operations a specific server exposes
+* Haxall
+* FIN Framework
+* SkySpark
+* Niagara with the nHaystack driver
+* other Project Haystack-compatible platforms
 
-## Project Haystack References
+The nodes support Zinc, JSON, and Trio Haystack wire formats.
 
-The official Project Haystack operation docs are useful background for the node behaviors in this package:
+## References
 
-- [Project Haystack Ops](https://project-haystack.org/doc/docHaystack/Ops)
-- [Project Haystack HTTP API](https://project-haystack.org/doc/docHaystack/HttpApi)
+* [Project Haystack](https://project-haystack.org/)
+* [Haxall](https://haxall.io/)
+* [nHaystack Driver](https://github.com/ci-richard-mcelhinney/nhaystack)
 
-The node help and README in this repo paraphrase those docs for practical Node-RED usage. For the exact op definitions, request grids, and response grids, refer back to the official Project Haystack documentation.
+## License
+
+MIT
